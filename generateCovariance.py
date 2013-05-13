@@ -9,6 +9,12 @@ import numpy as nm
 
 nbuildings = 7;
 
+edgebelief = {};
+
+for i in range (0,7):
+    for j in range (0,7):
+        edgebelief[str(i)+str(j)] = random.randint(5,15);
+
 for i in range (0,7):
     for j in range (0,7):
         for k in range (0,7):
@@ -18,5 +24,6 @@ for i in range (0,7):
                     correlation = 1
                 if (i == j or k == l):
                     correlation = 0
-                covariance = correlation*5*10
+                covariance = correlation*edgebelief[str(i)+str(j)]*edgebelief[str(k)+str(l)]
+                
                 print i, j, k, l,  "%.2f" % round(covariance,2)
