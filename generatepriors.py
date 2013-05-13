@@ -9,6 +9,10 @@ import numpy as nm
 
 nbuildings = 7;
 
+print nbuildings
+
+print
+
 Map = {'0': (0,0),'1': (-1,4), '2': (-2,-2),'3' : (-6,-2),'4': (3,2), '5': (3,3.5), '6': (3, -2)};
 
 for i in range(0, nbuildings):
@@ -19,6 +23,8 @@ for i in range(0, nbuildings):
         if (slowdist != 0):
             slowdist += 4 
         print i, j, "%.2f" % round(slowdist,2)
+ 
+print
         
 for i in range(0, nbuildings):
     for j in range(0, nbuildings):
@@ -26,6 +32,8 @@ for i in range(0, nbuildings):
         point2 = nm.asarray(Map[str(j)])
         mediumdist = nm.linalg.norm(point1-point2)*2.5
         print i, j, "%.2f" % round(mediumdist,2)
+        
+print
         
 for i in range(0, nbuildings):
     for j in range(0, nbuildings):
