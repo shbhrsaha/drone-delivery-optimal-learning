@@ -6,6 +6,8 @@ import random
 import bisect
 import collections
 
+# WEIGHTED PROBABILITY FUNCTIONS
+# ==============================
 def cdf(weights):
     total=sum(weights)
     result=[]
@@ -26,5 +28,12 @@ def weighted_choice(population,weights):
     x=random.random()
     idx=bisect.bisect(cdf_vals,x)
     return idx
+
+
+# CORRELATED BELIEFS UPDATING EQUATIONS
+# =====================================
+
+def newMean(oldMean, observed, ):
+
 
 
