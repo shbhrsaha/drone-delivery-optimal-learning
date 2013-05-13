@@ -33,7 +33,7 @@ def weighted_choice(population,weights):
 # CORRELATED BELIEFS UPDATING EQUATIONS
 # =====================================
 
-def newMean(oldMean, observed, ):
+def newMean(oldMean, observed):
 
-
+    return True
 
