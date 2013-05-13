@@ -32,10 +32,14 @@ def main():
     simulation = Simulation(simulationFile)
     policy = Policy(POLICY_NAME)
 
-    for i in range(1,NUMBER_OF_ITERATIONS):
-        simulation.iterate()
+    totalDistance = 0
+    for n in range(1,NUMBER_OF_ITERATIONS):
 
-    
+        totalDistance += simulation.iterate(n, truth, simulation, policy)
+
+    averageTravelTime = totalDistance/float(NUMBER_OF_ITERATIONS)
+
+    print "Average Travel Time: " + str(averageTravelTime)
 
 if __name__ == "__main__":
     main()

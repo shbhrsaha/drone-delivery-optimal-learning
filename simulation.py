@@ -4,6 +4,7 @@
 
 class Simulation:
     
+    numberOfNodes = 0
     meanMatrix = ""
     precisionMatrix = ""
 
@@ -12,7 +13,7 @@ class Simulation:
         
         # read in file as matrix
         logging.info("Reading truth file")
-        numberOfNodes = int(simulationFile.readline())
+        self.numberOfNodes = int(simulationFile.readline())
         meanListMatrix = nm.zeros((numberOfNodes,numberOfNodes))
         precisionListMatrix = nm.zeros((numberOfNodes,numberOfNodes))
         
@@ -36,6 +37,8 @@ class Simulation:
 
         return
 
-    def iterate(self, policyFunction):
+    def iterate(self, n, truth, simulation, policy):
 
+        
+        
         return
