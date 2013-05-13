@@ -9,6 +9,10 @@ import numpy as nm
 
 nbuildings = 7;
 
+print nbuildings
+
+print
+
 Map = {'0': (0,0),'1': (-1,4), '2': (-2,-2),'3' : (-6,-2),'4': (3,2), '5': (3,3.5), '6': (3, -2)};
 
 for i in range(0, nbuildings):
@@ -27,6 +31,8 @@ for i in range(0, nbuildings):
             variance = 0;
         print i, j, "%.2f" % round(slowtruth,2), "%.2f" % round(variance,2)
         
+print
+        
 for i in range(0, nbuildings):
     for j in range(0, nbuildings):
         point1 = nm.asarray(Map[str(i)])
@@ -42,6 +48,8 @@ for i in range(0, nbuildings):
         if (slowtruth == 0):
             variance = 0;
         print i, j, "%.2f" % round(mediumtruth,2), "%.2f" % round(variance,2)
+
+print
         
 for i in range(0, nbuildings):
     for j in range(0, nbuildings):
