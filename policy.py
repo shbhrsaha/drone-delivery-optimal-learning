@@ -12,6 +12,12 @@ class Policy:
     VALID_POLICY_NAMES = ["epsilon-greedy","boltzmann-exploration","interval-estimation","knowledge-gradient"]
 
     policy_name = ""
+    
+    # tunable parameters
+    c = 0.5
+    rho = 0.5
+    zalpha = 0.5
+    
 
     def __init__(self, policy_name):
         """ Accepts the policy_name and returns false if policy_name invalid"""
@@ -22,16 +28,13 @@ class Policy:
         else:
             return false
 
-    def make_decision(self, means, precisions, epsilon = False, rho = False, zalpha = False):
+    def make_choice(self, means, precisions, n):
         """ Returns the index of the alternative to choose given a list of means and precisions """
 
         # EPSILON-GREEDY
         if self.policy_name == "epsilon-greedy":
-
-            # make sure epsilon is defined
-            if not epsilon:
-                logging.error("Invalid parameters: You must provide an epsilon at each iteration of epsilon-greedy policy")
-                sys.exit()
+            
+            epsilon = c/float(n)
             
             # toss this epsilon-weighted coin to see if we'll explore or exploit
             uniform_sampling = random.random()
@@ -47,11 +50,8 @@ class Policy:
         # BOLTZMANN-EXPLORATION
         elif self.policy_name == "boltzmann-exploration":
             
-            # make sure epsilon is defined
-            if not rho:
-                logging.error("Invalid parameters: You must provide rho at each iteration of Boltzmann-exploration policy")
-                sys.exit()
-    
+            rho = self.rho
+            
             size = len(means)
             weights = []
             for i in range(0, size):
@@ -66,10 +66,7 @@ class Policy:
         # INTERVAL ESTIMATION
         elif self.policy_name == "interval-estimation":
             
-            # make sure zalpha is defined
-            if not zlpha:
-                logging.error("Invalid parameters: You must provide z-alpha at each iteration of Interval Estimation policy")
-                sys.exit()
+            zalpha = self.zalpha
             
             scores = [x + zalpha*(1/math.sqrt(y)) for x,y in zip(means,precisions)]
             
