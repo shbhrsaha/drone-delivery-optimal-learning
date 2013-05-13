@@ -38,7 +38,9 @@ for i in range (0,nbuildings):
                 covariancematrix[3][counter] = l
                 covariancematrix[4][counter] = covariance
                 counter += 1
-for i in range (0, 49*49):
-    print covariancematrix[0][i], covariancematrix[1][i], covariancematrix[2][i], covariancematrix[3][i],  "%.2f" % round(covariancematrix[4][i],2)
+for j in range (0, 3):
+    for i in range (0, 49*49):
+        print covariancematrix[0][i], covariancematrix[1][i], covariancematrix[2][i], covariancematrix[3][i],  "%.2f" % round(covariancematrix[4][i],2)
+    print
                 
                 
