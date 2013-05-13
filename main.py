@@ -5,9 +5,7 @@
     
 """
 import sys, logging
-
-
-
+import truth, policy, simulation, tspsolver
 
 logging.basicConfig(level=logging.INFO)
 
@@ -33,6 +31,11 @@ def main():
     truth = Truth(truthFile)
     simulation = Simulation(simulationFile)
     policy = Policy(POLICY_NAME)
+
+    for i in range(1,NUMBER_OF_ITERATIONS):
+        simulation.iterate()
+
+    
 
 if __name__ == "__main__":
     main()

@@ -10,8 +10,8 @@ logging.basicConfig(level=logging.INFO)
 
 class Truth:
     
-    meanMatrix = ""
-    noiseMatrix = ""
+    meanMatrices = ""
+    noiseMatrices = ""
 
     def __init__(self, truthFile):
         """ Read the truth file and instantiate this instance """
@@ -19,37 +19,43 @@ class Truth:
         # read in file as matrix
         logging.info("Reading truth file")
         numberOfNodes = int(truthFile.readline())
-        meanListMatrix = nm.zeros((numberOfNodes,numberOfNodes))
-        noiseListMatrix = nm.zeros((numberOfNodes,numberOfNodes))
         
         for line in truthFile.readlines():
         
-            columns = line.replace("\n","").split(" ")
-            startNodeIndex = int(columns[0])
-            endNodeIndex = int(columns[1])
-            meanTravelTime = float(columns[2])
-            noiseTravelTime = float(columns[3])
+            line = line.replace("\n","")
+            
+            if line == "":
+                # start a new matrix
+                if len(meanMatrices) != 0:
+                    self.meanMatrices.append(meanMatrix)
+                    self.noiseMatrices.append(noiseMatrix)
+                meanMatrix = nm.zeros((numberOfNodes,numberOfNodes))
+                noiseMatrix = nm.zeros((numberOfNodes,numberOfNodes))
+                continue
+    
+            # add this line to the current matrix
+            startNodeIndex = int(line[0])
+            endNodeIndex = int(line[1])
+            meanTravelTime = float(line[2])
+            noiseTravelTime = float(line[3])
+            
+            meanMatrix[startNodeIndex][endNodeIndex] = meanTravelTime
+            noiseMatrix[startNodeIndex][endNodeIndex] = noiseTravelTime
         
-            meanListMatrix[startNodeIndex][endNodeIndex] = meanTravelTime
-            noiseListMatrix[startNodeIndex][endNodeIndex] = noiseTravelTime
-        
-        # if you want to use Numpy matrices instead of arrays
-        #self.meanMatrix = nm.matrix(meanListMatrix)
-        #self.noiseMatrix = nm.matrix(noiseListMatrix)
-        
-        self.meanMatrix = meanListMatrix
-        self.noiseMatrix = noiseListMatrix
-                
+        # add the last matrix onto the list
+        self.meanMatrices.append(meanMatrix)
+        self.noiseMatrices.append(noiseMatrix)
+
         return
 
-    def measure(self, startNodeIndex, endNodeIndex):
+    def measure(self, matrixIndex, startNodeIndex, endNodeIndex):
         """ Returns a measured value from the truth.
             
             Assumes truth is normally distributed
         """
         
-        mean = self.meanMatrix[startNodeIndex][endNodeIndex]
-        noise = self.noiseMatrix[startNodeIndex][endNodeIndex]
+        mean = self.meanMatrices[matrixIndex][startNodeIndex][endNodeIndex]
+        noise = self.noiseMatrices[matrixIndex][startNodeIndex][endNodeIndex]
 
         # ensure measurement is a positive number
         x = -1
