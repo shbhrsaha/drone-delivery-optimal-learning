@@ -33,11 +33,45 @@ def weighted_choice(population,weights):
 # CORRELATED BELIEFS UPDATING EQUATIONS
 # =====================================
 
-def newMean(oldMean, observed):
-
+def newMean(oldMean, observed, oldCovariance, startIndex, endIndex):
+    counter = 0;
+    oldMeanChange = zeros(49)
+    for i in range (0, 7):
+        for j in range (0, 7):
+            oldMeanChange = array[counter];
+            counter += 1;
+    rowindex = mappingdict{"starIndex endEndex"}
+    covarianceColumn = zeros(49)
+    for i in range(0,49):
+        covarianceColumn[i] == oldCovariance[rowindex][i]
+    variance = covarianceColumn[rowindex]
+    oldprior = oldMean[startIndex][endIndex]
+    noise = 5;
+    tempNewMean = nm.sum(oldMeanChange, (observed - oldprior)/(noise + variance)*nm.array(covarianceColumn))
+    counter = 0
+    newMean = zeros(7,7)
+    for i in range(0, 7):
+        for j in range (0,7):
+            newMean[i][j] = tempNewMean[counter]
+            counter += 1
     return True
 
 def newCovariance(oldCovariance, observed):
+    counter = 0;
+    oldMeanChange = zeros(49)
+    for i in range (0, 7)
+        for j in range (0, 7)
+            oldMeanChange = array[counter];
+            counter++;
+    rowindex = mappingdict{"starIndex endEndex"}
+    covarianceColumn = zeros(49)
+    for i in range(0,49)
+        covarianceColumn[i] == oldCovariance[rowindex][i]
+    variance = covarianceColumn[rowindex]
+    oldprior = oldMean[startIndex][endIndex]
+    noise = 5;
+    numerator = nm.dot(covarianceColumn, covarianceColumn)
+    newCovariance = nm.subtract(oldCovariance,(numerator)/(noise + variance))
 
     return True
 
