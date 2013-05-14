@@ -133,8 +133,17 @@ class Simulation:
         # at the end of the day, guess the day and update the permanent beliefs
         day_type = simutils.determineDayType(tour, times, meanMatrices)
          
-        # TODO: CALL UPDATING EQUATIONS HERE!
-        #self.meanMatrices[day_type] =
+        # UPDATE OUR BELIEFS!
+        for i in range(0, tour - 1):
+                                    
+            startIndex = tour[i]
+            endIndex = tour[i + 1]
+            observed = times[i]
+            meanMatrix = self.meanMatrices[day_type]
+            covMatrix = self.covMatrices[day_type]
+            
+            self.meanMatrices[day_type] = simutils.newMean(meanMatrix, observed, covMatrix, startIndex, endIndex)
+            self.covMatrices[day_type] = simutils.newCovariance(covMatrix, observed)
                                     
         return
 

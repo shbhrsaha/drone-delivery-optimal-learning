@@ -33,39 +33,46 @@ def weighted_choice(population,weights):
 # CORRELATED BELIEFS UPDATING EQUATIONS
 # =====================================
 
+
 def newMean(oldMean, observed, oldCovariance, startIndex, endIndex):
+    
+    n = math.sqrt(len(list(oldCovariance[0])))
+    
     counter = 0;
-    oldMeanChange = zeros(49)
-    for i in range (0, 7):
-        for j in range (0, 7):
+    oldMeanChange = zeros(n*n)
+    for i in range (0, n):
+        for j in range (0, n):
             oldMeanChange = array[counter];
             counter += 1;
     rowindex = mappingdict{"starIndex endEndex"}
-    covarianceColumn = zeros(49)
-    for i in range(0,49):
+    covarianceColumn = zeros(n*n)
+    for i in range(0,n*n):
         covarianceColumn[i] == oldCovariance[rowindex][i]
     variance = covarianceColumn[rowindex]
     oldprior = oldMean[startIndex][endIndex]
     noise = 5;
     tempNewMean = nm.sum(oldMeanChange, (observed - oldprior)/(noise + variance)*nm.array(covarianceColumn))
     counter = 0
-    newMean = zeros(7,7)
-    for i in range(0, 7):
-        for j in range (0,7):
+    newMean = zeros(n,n)
+    for i in range(0, n):
+        for j in range (0,n):
             newMean[i][j] = tempNewMean[counter]
             counter += 1
     return True
 
 def newCovariance(oldCovariance, observed):
+
+    n = math.sqrt(len(list(oldCovariance[0])))
+    
     counter = 0;
-    oldMeanChange = zeros(49)
-    for i in range (0, 7)
-        for j in range (0, 7)
+    oldMeanChange = zeros(n*n)
+    for i in range (0, n)
+        for j in range (0, n)
             oldMeanChange = array[counter];
             counter++;
     rowindex = mappingdict{"starIndex endEndex"}
-    covarianceColumn = zeros(49)
-    for i in range(0,49)
+    covarianceColumn = zeros(n*n)
+    for i in range(0,n*n)
         covarianceColumn[i] == oldCovariance[rowindex][i]
     variance = covarianceColumn[rowindex]
     oldprior = oldMean[startIndex][endIndex]
