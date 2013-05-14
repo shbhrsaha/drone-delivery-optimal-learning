@@ -66,12 +66,6 @@ def generateMappingDict(n):
 
     return mappingDict
 
-if __name__ == "__main__":
-
-    mappingDict = generateMappingDict(3)
-
-    print mappingDict
-
 # DETERMINE DAY TYPE
 # ==================
 
@@ -81,7 +75,18 @@ def determineDayType(tour, times, meanMatrices):
 
     scores = []
     for i in range(0, number_of_types):
+        
+        pastTimes = [meanMatrices[i][j][j + 1] for j in range(0,len(tour) - 1)]
+        terms = [obs - past for obs,past in zip(times,pastTimes)]
+        scores[i] = 1/float(sum(terms))
 
-        scores[i] =
+    return max(xrange(len(scores)),key=scores.__getitem__)
 
-    max(xrange(len(scores)),key=scores.__getitem__)
+# UNIT TESTING
+# ============
+
+if __name__ == "__main__":
+    
+    mappingDict = generateMappingDict(3)
+    
+    print mappingDict

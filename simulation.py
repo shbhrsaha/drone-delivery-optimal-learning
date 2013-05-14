@@ -13,6 +13,12 @@ class Simulation:
     covMatrices = []
     mappingDict = {}
     
+    def lookupPrecFromCov(covMatrix,current,y):
+    
+        index = self.mappingDict[str(current) + " " + str(y)]
+        stdev = covMatrix[index][index]
+        return 1/float(stdev*stdev)
+    
 
     def __init__(self, priorsFile, covFile):
         """ Read the simulation file and instantiate this simulation """
@@ -90,20 +96,25 @@ class Simulation:
         nodesLeftToVisit = list(xrange(self.numberOfNodes))
         nodesLeftToVisit.pop(0)
         
+        # guess day type randomly, at first
+        day_type = random.randomint(0,len(meanMatrices)
+        meanMatrix = self.meanMatrices[day_type]
+        
         # repeat while we still have nodes left to visit
         while len(nodesLeftToVisit) > 0:
         
             current = tour[-1]
             
-            # determine what type of day it is
-            day_type = simutils.determineDayType(tour, times, meanMatrices)
-
-            meanMatrix = self.meanMatrices[i]
-            precisionMatrix = self.precisionMatrices[i]
+            # guess what type of day it is after the first measurement
+            if len(times) != 0:
+                day_type = simutils.determineDayType(tour, times, meanMatrices)
+        
+            meanMatrix = self.meanMatrices[day_type]
+            covMatrix = self.covMatrices[day_type]
             
             # prepare the alternatives to be fed into learning policy
             means_all = meanMatrix[current]
-            precisions_all = precisionMatrix[current]
+            precisions_all = [self.lookupPrecFromCov(covMatrix,current,y) for y in range(0,self.numberOfNodes)]
             
             # pop off all the means and precisions that are already in the tour
             means_left = [i for j, i in enumerate(means_all) if j not in tour]
@@ -119,7 +130,12 @@ class Simulation:
             time = truth.measure(n,tour[-2],tour[-1])
             times.append(time)
         
-        
+        # at the end of the day, guess the day and update the permanent beliefs
+        day_type = simutils.determineDayType(tour, times, meanMatrices)
+         
+        # TODO: CALL UPDATING EQUATIONS HERE!
+        #self.meanMatrices[day_type] =
+                                    
         return
 
 if __name__ == "__main__":
