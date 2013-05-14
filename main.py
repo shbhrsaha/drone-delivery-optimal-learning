@@ -40,7 +40,8 @@ def main():
     totalDistance = 0
     for n in range(1,NUMBER_OF_ITERATIONS):
 
-        totalDistance = simulation.iterate(n, truth, simulation, policy)
+        result = simulation.iterate(n, truth, simulation, policy)
+        totalDistance += result
 
     averageTravelTime = totalDistance/float(NUMBER_OF_ITERATIONS)
 

@@ -16,7 +16,7 @@ class Policy:
     # tunable parameters
     c = 0.5
     rho = 0.5
-    zalpha = 0.5
+    zalpha = 0.1
     
 
     def __init__(self, policy_name):
@@ -30,6 +30,8 @@ class Policy:
 
     def make_choice(self, means, precisions, n):
         """ Returns the index of the alternative to choose given a list of means and precisions """
+        
+        means = [-1*x for x in means]
         
         if len(means) == 1:
             return 0
