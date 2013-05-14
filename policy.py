@@ -30,9 +30,14 @@ class Policy:
 
     def make_choice(self, means, precisions, n):
         """ Returns the index of the alternative to choose given a list of means and precisions """
+        
+        if len(means) == 1:
+            return 0
 
         # EPSILON-GREEDY
         if self.policy_name == "epsilon-greedy":
+            
+            c = self.c
             
             epsilon = c/float(n)
             
@@ -59,9 +64,10 @@ class Policy:
                 denominator_terms = [math.exp(rho*x) for x in other_means]
                 denominator = sum(denominator_terms)
                 p = math.exp(rho*means[i])/float(denominator)
-            weights.append(p)
-
+                weights.append(p)
+            
             return simutils.weighted_choice(means,weights)
+
 
         # INTERVAL ESTIMATION
         elif self.policy_name == "interval-estimation":
@@ -73,9 +79,12 @@ class Policy:
             # return index of the max score
             return max(xrange(len(scores)),key=scores.__getitem__)
 
-        # KNOWLEDGE GRADIENT WITH CORRELATED BELIEFS -- not implemented yet... see MATLAB example
+        # KNOWLEDGE GRADIENT WITH CORRELATED BELIEFS -- not implemented yet... see MATLAB
         elif self.policy_name == "knowledge-gradient":
 
+            return
+
+            """
             theta_n = [x for x in means]
             max_x = []
             sigma_n = [1/math.sqrt(x) for x in precisions]
@@ -88,7 +97,7 @@ class Policy:
             
             # return max(xrange(len(KGindex)),key=KGindex.__getitem__)
             return False
-                
+            """
                 
         else:
 

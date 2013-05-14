@@ -29,66 +29,6 @@ def weighted_choice(population,weights):
     idx=bisect.bisect(cdf_vals,x)
     return idx
 
-
-# CORRELATED BELIEFS UPDATING EQUATIONS
-# =====================================
-
-
-def newMean(oldMean, observed, oldCovariance, startIndex, endIndex):
-    
-    n = math.sqrt(len(list(oldCovariance[0])))
-    
-    counter = 0;
-    oldMeanChange = zeros(n*n)
-    for i in range (0, n):
-        for j in range (0, n):
-            oldMeanChange = array[counter];
-            counter += 1;
-    rowindex = mappingdict{"starIndex endEndex"}
-    covarianceColumn = zeros(n*n)
-    for i in range(0,n*n):
-        covarianceColumn[i] == oldCovariance[rowindex][i]
-    variance = covarianceColumn[rowindex]
-    oldprior = oldMean[startIndex][endIndex]
-    noise = 5;
-    tempNewMean = nm.sum(oldMeanChange, (observed - oldprior)/(noise + variance)*nm.array(covarianceColumn))
-    counter = 0
-    newMean = zeros(n,n)
-    for i in range(0, n):
-        for j in range (0,n):
-            newMean[i][j] = tempNewMean[counter]
-            counter += 1
-    return True
-
-def newCovariance(oldCovariance, observed):
-
-    n = math.sqrt(len(list(oldCovariance[0])))
-    
-    counter = 0;
-    oldMeanChange = zeros(n*n)
-    for i in range (0, n)
-        for j in range (0, n)
-            oldMeanChange = array[counter];
-            counter++;
-    rowindex = mappingdict{"starIndex endEndex"}
-    covarianceColumn = zeros(n*n)
-    for i in range(0,n*n)
-        covarianceColumn[i] == oldCovariance[rowindex][i]
-    variance = covarianceColumn[rowindex]
-    oldprior = oldMean[startIndex][endIndex]
-    noise = 5;
-    numerator = nm.dot(covarianceColumn, covarianceColumn)
-    newCovariance = nm.subtract(oldCovariance,(numerator)/(noise + variance))
-
-    return True
-
-# CONVERT COVARIANCE MATRIX TO VARIANCE
-# =====================================
-
-def readVariance():
-
-    return True
-
 # GENERATE SOME SORT OF MAPPING DICTIONARY
 # TO GO FROM EDGE IDENTIFIERS TO INDEX IN COV MATRIX
 # ==================================================
@@ -113,13 +53,13 @@ def generateMappingDict(n):
 def determineDayType(tour, times, meanMatrices):
 
     number_of_types = len(meanMatrices)
-
+    
     scores = []
     for i in range(0, number_of_types):
         
         pastTimes = [meanMatrices[i][j][j + 1] for j in range(0,len(tour) - 1)]
         terms = [obs - past for obs,past in zip(times,pastTimes)]
-        scores[i] = 1/float(sum(terms))
+        scores.append(1/float(sum(terms)))
 
     return max(xrange(len(scores)),key=scores.__getitem__)
 

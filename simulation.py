@@ -2,7 +2,7 @@
     This class contains the beliefs as the simulation is run
 """
 
-import sys, simutils
+import sys, simutils, random
 
 import numpy as nm
 
@@ -13,11 +13,64 @@ class Simulation:
     covMatrices = []
     mappingDict = {}
     
-    def lookupPrecFromCov(covMatrix,current,y):
+    def lookupPrecFromCov(self, covMatrix,current,y):
     
         index = self.mappingDict[str(current) + " " + str(y)]
         stdev = covMatrix[index][index]
+        
+        if stdev == 0:
+            return 1
+        
         return 1/float(stdev*stdev)
+    
+    def newMean(self, oldMean, observed, oldCovariance, startIndex, endIndex):
+    
+        n = self.numberOfNodes
+        
+        counter = 0
+        oldMeanChange = nm.zeros((n,n))
+        for i in range (0, n):
+            for j in range (0, n):
+                oldMeanChange = nm.zeros(counter)
+                counter += 1
+        rowindex = self.mappingDict[str(startIndex) + " " + str(endIndex)]
+        covarianceColumn = nm.zeros((n*n,n*n))
+        for i in range(0,n*n):
+            covarianceColumn[i] = oldCovariance[rowindex][i]
+        variance = covarianceColumn[rowindex]
+        oldprior = oldMean[startIndex][endIndex]
+        noise = 5
+        tempNewMean = nm.sum(oldMeanChange, (observed - oldprior)/(noise + variance)*nm.array(covarianceColumn))
+        counter = 0
+        newMean = nm.zeros((n,n))
+        for i in range(0, n):
+            for j in range (0,n):
+                newMean[i][j] = tempNewMean[counter]
+                counter += 1
+    
+        return newMean
+
+    def newCovariance(self, oldCovariance, observed, startIndex, endIndex):
+
+        n = self.numberOfNodes
+        
+        counter = 0;
+        oldMeanChange = nm.zeros((n,n))
+        for i in range (0, n):
+            for j in range (0, n):
+                oldMeanChange = array[counter]
+                counter += 1
+        rowindex = self.mappingDict[startIndex + " " + endIndex]
+        covarianceColumn = nm.zeros((n,n))
+        for i in range(0,n*n):
+            covarianceColumn[i] = oldCovariance[rowindex][i]
+        variance = covarianceColumn[rowindex]
+        oldprior = oldMean[startIndex][endIndex]
+        noise = 5
+        numerator = nm.dot(covarianceColumn, covarianceColumn)
+        newCovariance = nm.subtract(oldCovariance,(numerator)/(noise + variance))
+
+        return newCovariance
     
 
     def __init__(self, priorsFile, covFile):
@@ -97,7 +150,7 @@ class Simulation:
         nodesLeftToVisit.pop(0)
         
         # guess day type randomly, at first
-        day_type = random.randomint(0,len(meanMatrices)
+        day_type = random.randint(0,len(self.meanMatrices) - 1)
         meanMatrix = self.meanMatrices[day_type]
         
         # repeat while we still have nodes left to visit
@@ -107,7 +160,7 @@ class Simulation:
             
             # guess what type of day it is after the first measurement
             if len(times) != 0:
-                day_type = simutils.determineDayType(tour, times, meanMatrices)
+                day_type = simutils.determineDayType(tour, times, self.meanMatrices)
         
             meanMatrix = self.meanMatrices[day_type]
             covMatrix = self.covMatrices[day_type]
@@ -131,10 +184,10 @@ class Simulation:
             times.append(time)
         
         # at the end of the day, guess the day and update the permanent beliefs
-        day_type = simutils.determineDayType(tour, times, meanMatrices)
+        day_type = simutils.determineDayType(tour, times, self.meanMatrices)
          
         # UPDATE OUR BELIEFS!
-        for i in range(0, tour - 1):
+        for i in range(0, len(tour) - 1):
                                     
             startIndex = tour[i]
             endIndex = tour[i + 1]
@@ -142,10 +195,13 @@ class Simulation:
             meanMatrix = self.meanMatrices[day_type]
             covMatrix = self.covMatrices[day_type]
             
-            self.meanMatrices[day_type] = simutils.newMean(meanMatrix, observed, covMatrix, startIndex, endIndex)
-            self.covMatrices[day_type] = simutils.newCovariance(covMatrix, observed)
-                                    
-        return
+            try:
+                self.meanMatrices[day_type] = self.newMean(meanMatrix, observed, covMatrix, startIndex, endIndex)
+                self.covMatrices[day_type] = self.newCovariance(covMatrix, observed, startIndex, endIndex)
+            except:
+                pass
+    
+        return sum(times)
 
 if __name__ == "__main__":
 
