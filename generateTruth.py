@@ -45,7 +45,7 @@ for i in range(0, nbuildings):
         variance = random.gauss(8, 15);
         if (variance < 0):
             variance = math.fabs(variance);
-        if (slowtruth == 0):
+        if (mediumtruth == 0):
             variance = 0;
         print i, j, "%.2f" % round(mediumtruth,2), "%.2f" % round(variance,2)
 
