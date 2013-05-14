@@ -37,3 +37,51 @@ def newMean(oldMean, observed):
 
     return True
 
+def newCovariance(oldCovariance, observed):
+
+    return True
+
+# CONVERT COVARIANCE MATRIX TO VARIANCE
+# =====================================
+
+def readVariance():
+
+    return True
+
+# GENERATE SOME SORT OF MAPPING DICTIONARY
+# TO GO FROM EDGE IDENTIFIERS TO INDEX IN COV MATRIX
+# ==================================================
+
+def generateMappingDict(n):
+
+    mappingDict = {}
+    
+    nextAvailableIndex = 0
+    
+    for i in range(0,n):
+        for j in range(0,n):
+            code = str(i) + " " + str(j)
+            mappingDict[code] = nextAvailableIndex
+            nextAvailableIndex += 1
+
+    return mappingDict
+
+if __name__ == "__main__":
+
+    mappingDict = generateMappingDict(3)
+
+    print mappingDict
+
+# DETERMINE DAY TYPE
+# ==================
+
+def determineDayType(tour, times, meanMatrices):
+
+    number_of_types = len(meanMatrices)
+
+    scores = []
+    for i in range(0, number_of_types):
+
+        scores[i] =
+
+    max(xrange(len(scores)),key=scores.__getitem__)

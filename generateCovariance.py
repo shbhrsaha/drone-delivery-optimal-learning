@@ -11,8 +11,6 @@ nbuildings = 7;
 
 print nbuildings
 
-print
-
 edgebelief = {};
 covariancematrix = [[0 for x in xrange(49*49)] for x in xrange(5)]
 
@@ -39,8 +37,10 @@ for i in range (0,nbuildings):
                 covariancematrix[4][counter] = covariance
                 counter += 1
 for j in range (0, 3):
+    
+    print
+    
     for i in range (0, 49*49):
         print covariancematrix[0][i], covariancematrix[1][i], covariancematrix[2][i], covariancematrix[3][i],  "%.2f" % round(covariancematrix[4][i],2)
-    print
                 
                 

@@ -2,49 +2,85 @@
     This class contains the beliefs as the simulation is run
 """
 
+import sys, simutils
+
+import numpy as nm
+
 class Simulation:
     
     numberOfNodes = 0
-    meanMatrices = ""
-    precisionMatrices = ""
+    meanMatrices = []
+    covMatrices = []
+    mappingDict = {}
+    
 
-    def __init__(self, simulationFile):
+    def __init__(self, priorsFile, covFile):
         """ Read the simulation file and instantiate this simulation """
         
-        # read in file as matrix
-        logging.info("Reading simulation file")
-        self.numberOfNodes = int(simulationFile.readline())
-
-        meanListMatrix = nm.zeros((numberOfNodes,numberOfNodes))
-        precisionListMatrix = nm.zeros((numberOfNodes,numberOfNodes))
+        # read in priorsFile as matrix
+        numberOfNodes = int(priorsFile.readline())
+        self.numberOfNodes = numberOfNodes
         
-        for line in truthFile.readlines():
+        isFirstBlank = True
+        for line in priorsFile.readlines():
             
             line = line.replace("\n","")
             
             if line == "":
                 # start a new matrix
-                if len(meanMatrices) != 0:
+                if not isFirstBlank:
                     self.meanMatrices.append(meanMatrix)
-                    self.precisionMatrices.append(precisionMatrix)
                 meanMatrix = nm.zeros((numberOfNodes,numberOfNodes))
-                noiseMatrix = nm.zeros((numberOfNodes,numberOfNodes))
+                isFirstBlank = False
                 continue
+        
+            line = line.split(" ")
             
             # add this line to the current matrix
             startNodeIndex = int(line[0])
             endNodeIndex = int(line[1])
             meanTravelTime = float(line[2])
-            noiseTravelTime = float(line[3])
-            
-            meanMatrix[startNodeIndex][endNodeIndex] = meanTravelTime
-            precisionMatrix[startNodeIndex][endNodeIndex] = noiseTravelTime
         
+            meanMatrix[startNodeIndex][endNodeIndex] = meanTravelTime
+    
         # add the last matrix onto the list
         self.meanMatrices.append(meanMatrix)
-        self.precisionMatrices.append(precisionMatrix)
+    
+        # read in the covariance file
+
+        self.mappingDict = simutils.generateMappingDict(numberOfNodes)
+                
+        numberOfNodes = int(covFile.readline())
+        if numberOfNodes != self.numberOfNodes:
+            print "WARNING: number of nodes in covariance file does not match that in priorsFile"
+        
+        isFirstBlank = True
+        for line in covFile.readlines():
+            
+            line = line.replace("\n","")
+            
+            if line == "":
+                # start a new matrix
+                if not isFirstBlank:
+                    self.covMatrices.append(covMatrix)
+                covMatrix = nm.zeros((numberOfNodes*numberOfNodes,numberOfNodes*numberOfNodes))
+                isFirstBlank = False
+                continue
+            
+            line = line.split(" ")
+            
+            # add this line to the current matrix
+            startEdgeIndex = self.mappingDict[line[0] + " " + line[1]]
+            endEdgeIndex = self.mappingDict[line[2] + " " + line[3]]
+            cov = float(line[4])
+            
+            covMatrix[startEdgeIndex][endEdgeIndex] = cov
+        
+        # add the last matrix onto the list
+        self.covMatrices.append(covMatrix)
         
         return
+
 
     def iterate(self, n, truth, simulation, policy):
         """ Simulates a single day of the simulation """
@@ -60,7 +96,8 @@ class Simulation:
             current = tour[-1]
             
             # determine what type of day it is
-            # TODO: WRITE THIS LOGIC
+            day_type = simutils.determineDayType(tour, times, meanMatrices)
+
             meanMatrix = self.meanMatrices[i]
             precisionMatrix = self.precisionMatrices[i]
             
@@ -84,3 +121,29 @@ class Simulation:
         
         
         return
+
+if __name__ == "__main__":
+
+    priorsFile = open(sys.argv[1])
+    covFile = open(sys.argv[2])
+    
+    simulation = Simulation(priorsFile, covFile)
+    
+    numberOfNodes = int(simulation.numberOfNodes)
+    
+    print "Successfully generated simulation object"
+    print "Your priors file contains " + str(numberOfNodes) + " nodes"
+    print "Here is what the various mean matrices look like: "
+    
+    for matrix in simulation.meanMatrices:
+        print matrix
+        print "=================================="
+
+    print "Here is what the various covariance matrices look like: "
+    
+    for matrix in simulation.covMatrices:
+        
+        print matrix
+        print "=================================="
+
+    print "Unit testing complete."
